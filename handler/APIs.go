@@ -3,6 +3,7 @@ package handler
 import (
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 
@@ -59,10 +60,17 @@ func DeletarTransacoes(c *gin.Context) {
 	c.JSON(http.StatusBadRequest, gin.H{})
 }
 
-func Estaticas(c *gin.Context) {
+func Estatisticas(c *gin.Context) {
 	fmt.Println("[handler] Coletando estatísticas...")
 
-	ultimasTransacoes := utils.UltimasTransacoes(data.Transacoes)
+	duracaoStr := c.Param("duracao")
+	duracao, err := time.ParseDuration(duracaoStr + "s")
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"erro": "Duração em um formato invalido (exemplo de como precisa ser: 120, para 120 segundos"})
+		return
+	}
+
+	ultimasTransacoes := utils.UltimasTransacoes(data.Transacoes, duracao) // transações que aconteceram nos últimos X segundos
 
 	count := len(ultimasTransacoes)
 	sum := utils.Soma(ultimasTransacoes)
@@ -77,43 +85,5 @@ func Estaticas(c *gin.Context) {
 		"max":   max,
 	})
 
-	fmt.Println("[handler] Estatísticas enviadas!")
-}
-
-func Health(engine *gin.Engine) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		fmt.Println("[heath] Verificando rotas existentes...")
-
-		rotas := engine.Routes()
-		rotasMap := make(map[string]bool)
-
-		for _, rotaAtual := range rotas {
-			rotasMap[rotaAtual.Path] = true
-		}
-
-		rotasEsperadas := []string{"/transacoes", "/transacao/:senha", "/estatistica", "/health"}
-		rotasFaltando := []string{}
-
-		for _, rotaEsperada := range rotasEsperadas {
-			if !rotasMap[rotaEsperada] {
-				rotasFaltando = append(rotasFaltando, rotaEsperada)
-			}
-		}
-
-		if len(rotasFaltando) != 0 {
-			c.JSON(http.StatusInternalServerError, gin.H{
-				"status":        "Not OK",
-				"message":       "Erro ao obter todas as rotas!",
-				"rotasFaltando": rotasFaltando,
-			})
-			fmt.Println("[health] Erro nas Rotas!")
-			return
-		}
-
-		c.JSON(http.StatusOK, gin.H{
-			"status":  "OK",
-			"message": "Nenhum problema encontrado, todas as rotas estão certas",
-		})
-		fmt.Println("[health] Rotas estão ajustadas")
-	}
+	fmt.Println("[handler] Estatísticas enviadas com uma janela de duração de:", duracaoStr)
 }

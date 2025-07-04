@@ -23,10 +23,10 @@ func ValidarTransacao(dataHora time.Time, valor float64) bool {
 }
 
 // --- Funções de Estatísticas ---
-func UltimasTransacoes(lista []data.Transacao) []data.Transacao {
+func UltimasTransacoes(lista []data.Transacao, duracao time.Duration) []data.Transacao {
 	var ultimos []data.Transacao
 	agora := time.Now()
-	limiteTempo := agora.Add(-60 * time.Second) // Transações dos últimos 60 segundos
+	limiteTempo := agora.Add(-duracao)
 
 	for _, transacao := range lista {
 		// Verifica se a transação está dentro do período dos últimos 60 segundos

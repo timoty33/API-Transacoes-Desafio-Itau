@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"transactionsApi/handler"
+	sot "transactionsApi/suportObsTest"
 )
 
 func Routes() *gin.Engine {
@@ -15,8 +16,8 @@ func Routes() *gin.Engine {
 
 	server.POST("/transacoes", handler.SalvarTransacao)
 	server.DELETE("/transacao/:senha", handler.DeletarTransacoes)
-	server.GET("/estatistica", handler.Estaticas)
-	server.GET("/health", handler.Health(server))
+	server.GET("/estatistica/:duracao", handler.Estatisticas)
+	server.GET("/health", sot.Health(server))
 	fmt.Println("[server] Rotas criadas com sucesso!")
 
 	return server
