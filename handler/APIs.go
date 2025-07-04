@@ -59,6 +59,23 @@ func DeletarTransacoes(c *gin.Context) {
 	c.JSON(http.StatusBadRequest, gin.H{})
 }
 
-// func Estaticas(c *gin.Context) {
-// 	// A lógica para as estatísticas virá aqui.
-// }
+func Estaticas(c *gin.Context) {
+	fmt.Println("[handler] Coletando estatísticas...")
+
+	ultimasTransacoes := utils.UltimasTransacoes(data.Transacoes)
+
+	count := len(ultimasTransacoes)
+	sum := utils.Soma(ultimasTransacoes)
+	avg := utils.Media(ultimasTransacoes)
+	min, max := utils.MinMax(ultimasTransacoes)
+
+	c.JSON(http.StatusOK, gin.H{
+		"count": count,
+		"sum":   sum,
+		"avg":   avg,
+		"min":   min,
+		"max":   max,
+	})
+
+	fmt.Println("[handler] Estatísticas enviadas!")
+}

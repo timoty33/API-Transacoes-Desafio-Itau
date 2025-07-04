@@ -11,4 +11,6 @@ func main() {
 	server := routes.Routes()
 
 	server.Run()
+
+	fmt.Println("[main] Sistema ligado!")
 }
