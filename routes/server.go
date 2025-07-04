@@ -14,7 +14,7 @@ func Routes() *gin.Engine {
 	server := gin.Default()
 
 	server.POST("/transacoes", handler.SalvarTransacao)
-	server.DELETE("/transacoes/:senha", handler.DeletarTransacoes)
+	server.DELETE("/transacao/:senha", handler.DeletarTransacoes)
 	// server.GET("/estatistica", handler.Estaticas)
 
 	fmt.Println("[server] Rotas criadas com sucesso!")
