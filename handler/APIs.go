@@ -74,8 +74,16 @@ func Estatisticas(c *gin.Context) {
 
 	count := len(ultimasTransacoes)
 	sum := utils.Soma(ultimasTransacoes)
-	avg := utils.Media(ultimasTransacoes)
-	min, max := utils.MinMax(ultimasTransacoes)
+	avg, err := utils.Media(ultimasTransacoes)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao calcular a média: " + err.Error()})
+		return
+	}
+	min, max, err := utils.MinMax(ultimasTransacoes)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao calcular min/max: " + err.Error()})
+		return
+	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"count": count,

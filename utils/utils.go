@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"fmt"
 	"time"
 	"transactionsApi/data"
 )
@@ -39,25 +40,24 @@ func UltimasTransacoes(lista []data.Transacao, duracao time.Duration) []data.Tra
 	return ultimos
 }
 
-func Soma(lista []data.Transacao) float64 {
+func Soma(lista []data.Transacao) float64 { // Soma não gera erro, mas se futuramente modificar para ter, é aqui
 	var total float64
-
 	for _, l := range lista {
 		total += l.Valor
 	}
-
 	return total
 }
 
-func Media(lista []data.Transacao) float64 {
-	media := Soma(lista) / float64(len(lista))
-
-	return media
+func Media(lista []data.Transacao) (float64, error) {
+	if len(lista) == 0 {
+		return 0, fmt.Errorf("não é possível calcular a média de uma lista vazia")
+	}
+	return Soma(lista) / float64(len(lista)), nil
 }
 
-func MinMax(lista []data.Transacao) (float64, float64) {
+func MinMax(lista []data.Transacao) (float64, float64, error) {
 	if len(lista) == 0 {
-		return 0, 0 // Retorna 0 para ambos se a lista estiver vazia
+		return 0, 0, fmt.Errorf("não é possível calcular min/max de uma lista vazia")
 	}
 
 	min := lista[0].Valor
@@ -71,7 +71,5 @@ func MinMax(lista []data.Transacao) (float64, float64) {
 			max = transacao.Valor
 		}
 	}
-
-	// Retorna o valor mínimo e máximo
-	return min, max
+	return min, max, nil
 }
