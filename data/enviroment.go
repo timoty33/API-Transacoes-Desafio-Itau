@@ -1,6 +1,8 @@
 package data
 
-import "time"
+import (
+	"time"
+)
 
 type Transacao struct {
 	Valor    float64   `json:"valor" binding:"required"`
