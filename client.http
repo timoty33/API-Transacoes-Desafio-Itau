@@ -1,0 +1,11 @@
+POST http://localhost:8080/transacoes
+Content-Type: "application/json"
+
+{ 
+  "valor": 45.5,
+  "data_hora": "2026-10-10T17:45:00Z"
+}
+
+###
+
+GET http://localhost:8080/estatistica/120

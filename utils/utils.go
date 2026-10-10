@@ -3,7 +3,7 @@ package utils
 import (
 	"fmt"
 	"time"
-	"transactionsApi/data"
+	data "transactionsApi/model"
 )
 
 // --- Funções de validação ---

@@ -7,7 +7,6 @@ import (
 
 	"transactionsApi/handler"
 	"transactionsApi/middleware"
-	sot "transactionsApi/suportObsTest"
 )
 
 func Routes() *gin.Engine {
@@ -19,7 +18,7 @@ func Routes() *gin.Engine {
 	server.POST("/transacoes", handler.SalvarTransacao)
 	server.DELETE("/transacao/:senha", handler.DeletarTransacoes)
 	server.GET("/estatistica/:duracao", handler.Estatisticas)
-	server.GET("/health", sot.Health(server))
+	server.GET("/health", handler.Health(server))
 	fmt.Println("[server] Rotas criadas com sucesso!")
 
 	return server

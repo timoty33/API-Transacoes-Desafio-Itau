@@ -1,4 +1,4 @@
-package suportObsTests
+package handler
 
 import (
 	"fmt"
